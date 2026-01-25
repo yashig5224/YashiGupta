@@ -112,7 +112,10 @@
 
 @layer utilities {
   .text-gradient {
-    @apply bg-gradient-to-r from-amber-400 via-purple-400 to-teal-400 bg-clip-text text-transparent;
+    background: linear-gradient(to right, hsl(43 96% 56%), hsl(270 67% 72%), hsl(174 72% 56%));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
   .bg-gradient-radial {
