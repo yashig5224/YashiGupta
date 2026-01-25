@@ -5,7 +5,7 @@ import Navbar from "@/components/Navbar";
 import { ParticleHero } from "@/components/ui/particle-effect-hero";
 import AboutSection from "@/components/AboutSection";
 import ProjectsSection from "@/components/ProjectsSection";
-import JourneySection from "@/components/JourneySection";
+import SkillsSection from "@/components/SkillsSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 
@@ -59,7 +59,7 @@ const Index = () => {
               </section>
               <AboutSection />
               <ProjectsSection />
-              <JourneySection />
+              <SkillsSection />
               <ContactSection />
             </main>
             <Footer />
