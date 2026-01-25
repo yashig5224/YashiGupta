@@ -11,8 +11,7 @@ interface Particle {
   vx: number;
   vy: number;
   size: number;
-  color: string;
-  angle: number;
+  opacity: number;
 }
 
 interface BackgroundParticle {
@@ -61,8 +60,7 @@ const AntiGravityCanvas: React.FC = () => {
         vx: 0,
         vy: 0,
         size: randomRange(1, 2.5),
-        color: Math.random() > 0.85 ? 'hsl(43 96% 56%)' : Math.random() > 0.5 ? 'hsl(270 67% 72%)' : '#ffffff',
-        angle: Math.random() * Math.PI * 2,
+        opacity: randomRange(0.3, 1),
       });
     }
     particlesRef.current = newParticles;
@@ -100,24 +98,23 @@ const AntiGravityCanvas: React.FC = () => {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+    // Subtle radial vignette in grayscale
     const centerX = canvas.width / 2;
     const centerY = canvas.height / 2;
     const pulseSpeed = 0.0008;
-    const pulseOpacity = Math.sin(time * pulseSpeed) * 0.035 + 0.085;
+    const pulseOpacity = Math.sin(time * pulseSpeed) * 0.02 + 0.05;
     
     const gradient = ctx.createRadialGradient(
       centerX, centerY, 0,
       centerX, centerY, Math.max(canvas.width, canvas.height) * 0.7
     );
-    gradient.addColorStop(0, `rgba(180, 130, 255, ${pulseOpacity})`);
-    gradient.addColorStop(0.5, `rgba(255, 180, 100, ${pulseOpacity * 0.5})`);
+    gradient.addColorStop(0, `rgba(255, 255, 255, ${pulseOpacity})`);
     gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
     
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     const bgParticles = backgroundParticlesRef.current;
-    ctx.fillStyle = "#ffffff";
     
     for (let i = 0; i < bgParticles.length; i++) {
       const p = bgParticles[i];
@@ -133,6 +130,7 @@ const AntiGravityCanvas: React.FC = () => {
       const currentAlpha = p.alpha * (0.3 + 0.7 * twinkle);
 
       ctx.globalAlpha = currentAlpha;
+      ctx.fillStyle = "#ffffff";
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
       ctx.fill();
@@ -230,12 +228,9 @@ const AntiGravityCanvas: React.FC = () => {
       ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
       
       const velocity = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
-      const opacity = Math.min(0.3 + velocity * 0.1, 1);
+      const opacity = Math.min(0.3 + velocity * 0.1, 1) * p.opacity;
       
-      ctx.fillStyle = p.color === '#ffffff'
-        ? `rgba(255, 255, 255, ${opacity})`
-        : p.color;
-      
+      ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
       ctx.fill();
     }
 
@@ -328,7 +323,7 @@ export function ParticleHero({
             transition={{ duration: 0.8, delay: 0.2 }}
           >
             <motion.span
-              className="inline-block px-4 py-2 rounded-full glass text-sm font-medium text-muted-foreground mb-8"
+              className="inline-block px-4 py-2 rounded-full border border-border bg-card/50 text-sm font-medium text-muted-foreground mb-8"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.4 }}
@@ -338,7 +333,7 @@ export function ParticleHero({
 
             <h1 className="text-5xl sm:text-7xl md:text-8xl font-bold font-display tracking-tight mb-6">
               Hi, I'm{" "}
-              <span className="text-gradient">{title}</span>
+              <span className="text-foreground">{title}</span>
             </h1>
 
             <p className="text-xl sm:text-2xl text-muted-foreground mb-4">
@@ -358,7 +353,7 @@ export function ParticleHero({
           >
             <Button
               size="lg"
-              className="bg-gradient-to-r from-gold to-lavender text-primary-foreground hover:opacity-90 transition-opacity glow-gold group"
+              className="bg-foreground text-background hover:bg-foreground/90 transition-colors group"
               asChild
             >
               <a href="#projects">
@@ -369,7 +364,7 @@ export function ParticleHero({
             <Button
               size="lg"
               variant="outline"
-              className="border-border hover:bg-secondary/50"
+              className="border-border hover:bg-secondary"
               asChild
             >
               <a href="#contact">Contact Me</a>
@@ -389,7 +384,7 @@ export function ParticleHero({
               transition={{ duration: 2, repeat: Infinity }}
             >
               <motion.div
-                className="w-1.5 h-1.5 rounded-full bg-primary"
+                className="w-1.5 h-1.5 rounded-full bg-foreground"
                 animate={{ y: [0, 12, 0] }}
                 transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
               />
