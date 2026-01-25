@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import IntroAnimation from "@/components/IntroAnimation";
 import Navbar from "@/components/Navbar";
-import HeroSection from "@/components/HeroSection";
+import { ParticleHero } from "@/components/ui/particle-effect-hero";
 import AboutSection from "@/components/AboutSection";
 import ProjectsSection from "@/components/ProjectsSection";
 import JourneySection from "@/components/JourneySection";
@@ -54,7 +54,9 @@ const Index = () => {
           >
             <Navbar />
             <main>
-              <HeroSection />
+              <section id="home">
+                <ParticleHero />
+              </section>
               <AboutSection />
               <ProjectsSection />
               <JourneySection />
