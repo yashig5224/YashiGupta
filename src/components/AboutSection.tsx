@@ -9,31 +9,26 @@ const skills = [
     icon: Code2,
     title: "HTML, CSS & JavaScript",
     description: "Core web technologies for building responsive interfaces",
-    color: "from-gold to-amber-500",
   },
   {
     icon: Palette,
     title: "React & Tailwind CSS",
     description: "Modern frameworks for scalable applications",
-    color: "from-lavender to-purple-500",
   },
   {
     icon: Sparkles,
     title: "UI/UX Design",
     description: "Creating intuitive and beautiful user experiences",
-    color: "from-teal to-cyan-500",
   },
   {
     icon: Cpu,
     title: "AI Tools & Prompt Engineering",
     description: "Leveraging AI for enhanced development workflows",
-    color: "from-pink-400 to-rose-500",
   },
   {
     icon: Wand2,
     title: "Web Animations",
     description: "Bringing interfaces to life with motion design",
-    color: "from-orange-400 to-red-500",
   },
 ];
 
@@ -50,12 +45,12 @@ const AboutSection = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <span className="inline-block px-4 py-2 rounded-full glass text-sm font-medium text-muted-foreground mb-4">
+          <span className="inline-block px-4 py-2 rounded-full border border-border bg-card text-sm font-medium text-muted-foreground mb-4">
             About Me
           </span>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold font-display mb-6">
             Turning Ideas Into{" "}
-            <span className="text-gradient">Digital Reality</span>
+            <span className="text-foreground">Digital Reality</span>
           </h2>
         </motion.div>
 
@@ -66,10 +61,9 @@ const AboutSection = () => {
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <Card className="glass border-border/50 overflow-hidden">
+            <Card className="border border-border bg-card">
               <CardContent className="p-8">
                 <div className="relative">
-                  <div className="absolute -top-2 -left-2 w-20 h-20 rounded-full bg-gradient-to-r from-gold/20 to-lavender/20 blur-xl" />
                   <div className="relative z-10">
                     <h3 className="text-2xl font-bold font-display mb-4">
                       Hello! I'm Yashi 👋
@@ -113,11 +107,9 @@ const AboutSection = () => {
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.4, delay: 0.4 + index * 0.1 }}
               >
-                <Card className="glass border-border/50 hover:border-border transition-all group cursor-default">
+                <Card className="border border-border bg-card hover:bg-secondary/50 transition-all group cursor-default">
                   <CardContent className="p-4 flex items-center gap-4">
-                    <div
-                      className={`p-3 rounded-xl bg-gradient-to-r ${skill.color} text-white shrink-0 group-hover:scale-110 transition-transform`}
-                    >
+                    <div className="p-3 rounded-xl bg-secondary text-foreground shrink-0 group-hover:scale-110 transition-transform">
                       <skill.icon className="w-5 h-5" />
                     </div>
                     <div>

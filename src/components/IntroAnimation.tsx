@@ -12,13 +12,13 @@ const IntroAnimation = ({ onComplete }: IntroAnimationProps) => {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.8, ease: "easeInOut" }}
     >
-      {/* Background gradient orbs */}
+      {/* Subtle background pattern */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div
-          className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-gradient-to-r from-gold/20 to-transparent blur-3xl"
+          className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-muted/20 blur-3xl"
           animate={{
             scale: [1, 1.2, 1],
-            opacity: [0.3, 0.5, 0.3],
+            opacity: [0.1, 0.2, 0.1],
           }}
           transition={{
             duration: 4,
@@ -27,29 +27,16 @@ const IntroAnimation = ({ onComplete }: IntroAnimationProps) => {
           }}
         />
         <motion.div
-          className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full bg-gradient-to-r from-lavender/20 to-transparent blur-3xl"
+          className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full bg-muted/20 blur-3xl"
           animate={{
             scale: [1.2, 1, 1.2],
-            opacity: [0.3, 0.5, 0.3],
+            opacity: [0.1, 0.2, 0.1],
           }}
           transition={{
             duration: 4,
             repeat: Infinity,
             ease: "easeInOut",
             delay: 1,
-          }}
-        />
-        <motion.div
-          className="absolute top-1/2 right-1/3 w-72 h-72 rounded-full bg-gradient-to-r from-teal/20 to-transparent blur-3xl"
-          animate={{
-            scale: [1, 1.3, 1],
-            opacity: [0.2, 0.4, 0.2],
-          }}
-          transition={{
-            duration: 5,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 2,
           }}
         />
       </div>
@@ -60,9 +47,9 @@ const IntroAnimation = ({ onComplete }: IntroAnimationProps) => {
           text="Yashi Gupta"
           duration={0.08}
           delay={0.05}
-          textClassName="text-5xl sm:text-7xl md:text-8xl font-bold tracking-tight font-display"
-          underlineGradient="from-gold via-lavender to-teal"
-          underlineHeight="h-1.5"
+          textClassName="text-5xl sm:text-7xl md:text-8xl font-bold tracking-tight font-display text-foreground"
+          underlineGradient="from-foreground/50 via-foreground to-foreground/50"
+          underlineHeight="h-1"
           underlineOffset="-bottom-4"
           onAnimationComplete={() => {
             setTimeout(onComplete, 1200);
@@ -87,7 +74,7 @@ const IntroAnimation = ({ onComplete }: IntroAnimationProps) => {
           {[0, 1, 2].map((i) => (
             <motion.div
               key={i}
-              className="w-2 h-2 rounded-full bg-primary"
+              className="w-2 h-2 rounded-full bg-foreground"
               animate={{
                 scale: [1, 1.5, 1],
                 opacity: [0.5, 1, 0.5],

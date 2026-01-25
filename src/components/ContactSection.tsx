@@ -10,10 +10,10 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 
 const socialLinks = [
-  { icon: Github, href: "#", label: "GitHub", color: "hover:text-foreground" },
-  { icon: Linkedin, href: "#", label: "LinkedIn", color: "hover:text-blue-500" },
-  { icon: Instagram, href: "#", label: "Instagram", color: "hover:text-pink-500" },
-  { icon: Mail, href: "mailto:hello@yashigupta.com", label: "Email", color: "hover:text-gold" },
+  { icon: Github, href: "#", label: "GitHub" },
+  { icon: Linkedin, href: "#", label: "LinkedIn" },
+  { icon: Instagram, href: "#", label: "Instagram" },
+  { icon: Mail, href: "mailto:hello@yashigupta.com", label: "Email" },
 ];
 
 const ContactSection = () => {
@@ -26,7 +26,6 @@ const ContactSection = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     toast({
@@ -41,9 +40,7 @@ const ContactSection = () => {
   return (
     <section id="contact" className="py-24 relative" ref={ref}>
       {/* Background decoration */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-px bg-gradient-to-r from-transparent via-border to-transparent" />
-      <div className="absolute bottom-1/4 right-0 w-96 h-96 rounded-full bg-teal/5 blur-3xl" />
-      <div className="absolute top-1/4 left-0 w-96 h-96 rounded-full bg-gold/5 blur-3xl" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-px bg-border" />
 
       <div className="container px-6 relative z-10">
         <motion.div
@@ -52,12 +49,12 @@ const ContactSection = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <span className="inline-block px-4 py-2 rounded-full glass text-sm font-medium text-muted-foreground mb-4">
+          <span className="inline-block px-4 py-2 rounded-full border border-border bg-card text-sm font-medium text-muted-foreground mb-4">
             Get In Touch
           </span>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold font-display mb-6">
             Let's Build Something{" "}
-            <span className="text-gradient">Meaningful</span>
+            <span className="text-foreground">Meaningful</span>
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
             Have a project in mind or just want to say hello? I'd love to hear from you.
@@ -72,7 +69,7 @@ const ContactSection = () => {
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <Card className="glass border-border/50">
+            <Card className="border border-border bg-card">
               <CardContent className="p-8">
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="space-y-2">
@@ -81,7 +78,7 @@ const ContactSection = () => {
                       id="name"
                       placeholder="Your name"
                       required
-                      className="bg-secondary/30 border-border/50 focus:border-primary"
+                      className="bg-secondary/30 border-border focus:border-foreground"
                     />
                   </div>
                   <div className="space-y-2">
@@ -91,7 +88,7 @@ const ContactSection = () => {
                       type="email"
                       placeholder="your@email.com"
                       required
-                      className="bg-secondary/30 border-border/50 focus:border-primary"
+                      className="bg-secondary/30 border-border focus:border-foreground"
                     />
                   </div>
                   <div className="space-y-2">
@@ -101,12 +98,12 @@ const ContactSection = () => {
                       placeholder="Tell me about your project..."
                       required
                       rows={5}
-                      className="bg-secondary/30 border-border/50 focus:border-primary resize-none"
+                      className="bg-secondary/30 border-border focus:border-foreground resize-none"
                     />
                   </div>
                   <Button
                     type="submit"
-                    className="w-full bg-gradient-to-r from-gold to-lavender text-primary-foreground hover:opacity-90 transition-opacity"
+                    className="w-full bg-foreground text-background hover:bg-foreground/90 transition-colors"
                     disabled={isSubmitting}
                   >
                     {isSubmitting ? (
@@ -148,7 +145,7 @@ const ContactSection = () => {
                   <motion.a
                     key={social.label}
                     href={social.href}
-                    className={`p-4 rounded-xl glass border-border/50 text-muted-foreground ${social.color} transition-all hover:scale-105`}
+                    className="p-4 rounded-xl border border-border bg-card text-muted-foreground hover:text-foreground hover:bg-secondary transition-all hover:scale-105"
                     initial={{ opacity: 0, y: 20 }}
                     animate={isInView ? { opacity: 1, y: 0 } : {}}
                     transition={{ delay: 0.4 + index * 0.1 }}
@@ -167,7 +164,7 @@ const ContactSection = () => {
                 transition={{ delay: 0.8 }}
                 className="flex items-center gap-2 text-sm text-muted-foreground"
               >
-                <Heart className="w-4 h-4 text-pink-500" />
+                <Heart className="w-4 h-4 text-foreground" />
                 <span>Open to freelance opportunities</span>
               </motion.div>
             </div>

@@ -13,7 +13,6 @@ const projects = [
       "A visually stunning ice cream landing page with smooth animations and delightful micro-interactions.",
     image: "https://images.unsplash.com/photo-1501443762994-82bd5dace89a?w=600&h=400&fit=crop",
     tags: ["React", "Tailwind CSS", "Framer Motion"],
-    color: "from-pink-500/20 to-orange-500/20",
     demoUrl: "#",
     codeUrl: "#",
   },
@@ -23,7 +22,6 @@ const projects = [
       "A sophisticated brand website for an artisanal coffee and plant shop, featuring elegant typography and immersive imagery.",
     image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&h=400&fit=crop",
     tags: ["React", "SCSS", "GSAP"],
-    color: "from-green-500/20 to-emerald-500/20",
     demoUrl: "#",
     codeUrl: "#",
   },
@@ -33,7 +31,6 @@ const projects = [
       "A pixel-perfect recreation of Netflix's interface with dynamic content loading and responsive design.",
     image: "https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=600&h=400&fit=crop",
     tags: ["React", "Firebase", "TMDB API"],
-    color: "from-red-500/20 to-rose-500/20",
     demoUrl: "#",
     codeUrl: "#",
   },
@@ -43,7 +40,6 @@ const projects = [
       "A comprehensive web app for students to manage tasks, schedules, and academic goals with an intuitive interface.",
     image: "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=600&h=400&fit=crop",
     tags: ["React", "TypeScript", "LocalStorage"],
-    color: "from-blue-500/20 to-cyan-500/20",
     demoUrl: "#",
     codeUrl: "#",
   },
@@ -53,7 +49,6 @@ const projects = [
       "A collection of AI-powered creative tools and experiments, showcasing the intersection of art and technology.",
     image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=600&h=400&fit=crop",
     tags: ["AI/ML", "Python", "React"],
-    color: "from-purple-500/20 to-violet-500/20",
     demoUrl: "#",
     codeUrl: "#",
   },
@@ -76,20 +71,20 @@ const ProjectCard = ({
       animate={isInView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.5, delay: index * 0.1 }}
     >
-      <Card className="glass border-border/50 overflow-hidden group h-full">
-        <div className={`relative overflow-hidden bg-gradient-to-br ${project.color}`}>
+      <Card className="border border-border bg-card overflow-hidden group h-full">
+        <div className="relative overflow-hidden">
           <motion.img
             src={project.image}
             alt={project.title}
-            className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
+            className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110 grayscale group-hover:grayscale-0"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="absolute inset-0 bg-background/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           
           {/* Overlay buttons */}
           <div className="absolute inset-0 flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-4 group-hover:translate-y-0">
             <Button
               size="sm"
-              className="bg-primary/90 backdrop-blur-sm"
+              className="bg-foreground text-background hover:bg-foreground/90"
               asChild
             >
               <a href={project.demoUrl} target="_blank" rel="noopener noreferrer">
@@ -100,7 +95,7 @@ const ProjectCard = ({
             <Button
               size="sm"
               variant="outline"
-              className="backdrop-blur-sm bg-background/50"
+              className="bg-background/50 backdrop-blur-sm"
               asChild
             >
               <a href={project.codeUrl} target="_blank" rel="noopener noreferrer">
@@ -112,7 +107,7 @@ const ProjectCard = ({
         </div>
 
         <CardContent className="p-6">
-          <h3 className="text-xl font-bold font-display mb-2 group-hover:text-gradient transition-all duration-300">
+          <h3 className="text-xl font-bold font-display mb-2 group-hover:text-foreground transition-all duration-300">
             {project.title}
           </h3>
           <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
@@ -123,7 +118,7 @@ const ProjectCard = ({
               <Badge
                 key={tag}
                 variant="secondary"
-                className="bg-secondary/50 text-xs"
+                className="bg-secondary text-secondary-foreground text-xs"
               >
                 {tag}
               </Badge>
@@ -142,7 +137,7 @@ const ProjectsSection = () => {
   return (
     <section id="projects" className="py-24 relative" ref={ref}>
       {/* Background decoration */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-px bg-gradient-to-r from-transparent via-border to-transparent" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-px bg-border" />
 
       <div className="container px-6">
         <motion.div
@@ -151,11 +146,11 @@ const ProjectsSection = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <span className="inline-block px-4 py-2 rounded-full glass text-sm font-medium text-muted-foreground mb-4">
+          <span className="inline-block px-4 py-2 rounded-full border border-border bg-card text-sm font-medium text-muted-foreground mb-4">
             My Work
           </span>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold font-display mb-6">
-            Featured <span className="text-gradient">Projects</span>
+            Featured <span className="text-foreground">Projects</span>
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
             A selection of projects that showcase my skills in web development,

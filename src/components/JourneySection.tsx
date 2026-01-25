@@ -10,7 +10,6 @@ const milestones = [
     description:
       "Started my coding journey with HTML, CSS, and JavaScript. The magic of creating something from scratch ignited my passion.",
     date: "2022",
-    color: "bg-gold",
   },
   {
     icon: Code,
@@ -18,7 +17,6 @@ const milestones = [
     description:
       "Dove deep into React ecosystem, learned state management, and embraced component-based architecture.",
     date: "2023",
-    color: "bg-lavender",
   },
   {
     icon: Rocket,
@@ -26,7 +24,6 @@ const milestones = [
     description:
       "Created multiple production-ready projects, learning deployment, optimization, and user experience design.",
     date: "2023",
-    color: "bg-teal",
   },
   {
     icon: Star,
@@ -34,7 +31,6 @@ const milestones = [
     description:
       "Integrated AI tools into my workflow, learning prompt engineering and building AI-powered applications.",
     date: "2024",
-    color: "bg-pink-500",
   },
   {
     icon: Trophy,
@@ -42,7 +38,6 @@ const milestones = [
     description:
       "Currently focusing on advanced animations, performance optimization, and expanding my creative toolkit.",
     date: "Present",
-    color: "bg-gradient-to-r from-gold to-lavender",
   },
 ];
 
@@ -53,9 +48,7 @@ const JourneySection = () => {
   return (
     <section id="journey" className="py-24 relative overflow-hidden" ref={ref}>
       {/* Background decoration */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-px bg-gradient-to-r from-transparent via-border to-transparent" />
-      <div className="absolute top-1/2 -right-32 w-64 h-64 rounded-full bg-lavender/5 blur-3xl" />
-      <div className="absolute top-1/3 -left-32 w-64 h-64 rounded-full bg-gold/5 blur-3xl" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-px bg-border" />
 
       <div className="container px-6 relative z-10">
         <motion.div
@@ -64,11 +57,11 @@ const JourneySection = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <span className="inline-block px-4 py-2 rounded-full glass text-sm font-medium text-muted-foreground mb-4">
+          <span className="inline-block px-4 py-2 rounded-full border border-border bg-card text-sm font-medium text-muted-foreground mb-4">
             My Journey
           </span>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold font-display mb-6">
-            The Path of <span className="text-gradient">Growth</span>
+            The Path of <span className="text-foreground">Growth</span>
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
             Every step has been a learning experience. Here's how I've evolved as a developer.
@@ -79,7 +72,7 @@ const JourneySection = () => {
         <div className="max-w-3xl mx-auto">
           <div className="relative">
             {/* Vertical line */}
-            <div className="absolute left-6 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-gold via-lavender to-teal md:-translate-x-px" />
+            <div className="absolute left-6 md:left-1/2 top-0 bottom-0 w-px bg-border md:-translate-x-px" />
 
             {milestones.map((milestone, index) => (
               <motion.div
@@ -96,7 +89,7 @@ const JourneySection = () => {
                 {/* Icon */}
                 <div className="relative z-10 shrink-0">
                   <motion.div
-                    className={`w-12 h-12 rounded-full ${milestone.color} flex items-center justify-center text-white shadow-lg`}
+                    className="w-12 h-12 rounded-full bg-foreground text-background flex items-center justify-center shadow-lg"
                     whileHover={{ scale: 1.1 }}
                     transition={{ type: "spring", stiffness: 300 }}
                   >
@@ -106,7 +99,7 @@ const JourneySection = () => {
 
                 {/* Content */}
                 <div
-                  className={`glass border-border/50 rounded-xl p-6 flex-1 ${
+                  className={`border border-border bg-card rounded-xl p-6 flex-1 ${
                     index % 2 === 0 ? "md:mr-auto md:ml-0" : "md:ml-auto md:mr-0"
                   } max-w-md`}
                 >

@@ -32,7 +32,6 @@ export function NavBar({ items, className }: NavBarProps) {
 
   const handleClick = (item: NavItem) => {
     setActiveTab(item.name)
-    // Smooth scroll to section
     const element = document.querySelector(item.url)
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' })
@@ -50,7 +49,7 @@ export function NavBar({ items, className }: NavBarProps) {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className="flex items-center gap-1 bg-card/80 backdrop-blur-xl border border-border/50 py-2 px-2 rounded-full shadow-lg"
+        className="flex items-center gap-1 bg-card/90 backdrop-blur-xl border border-border py-2 px-2 rounded-full shadow-lg"
       >
         {items.map((item) => {
           const Icon = item.icon
@@ -82,12 +81,10 @@ export function NavBar({ items, className }: NavBarProps) {
                     damping: 30
                   }}
                 >
-                  {/* Glow effect */}
-                  <div className="absolute -inset-1 bg-gradient-to-r from-gold/30 via-lavender/30 to-teal/30 rounded-full blur-md" />
                   {/* Solid background */}
                   <div className="absolute inset-0 bg-secondary rounded-full" />
-                  {/* Top glow line (tubelight effect) */}
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2/3 h-px bg-gradient-to-r from-transparent via-primary to-transparent" />
+                  {/* Top highlight line */}
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2/3 h-px bg-foreground/20" />
                 </motion.div>
               )}
             </button>
