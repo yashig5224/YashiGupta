@@ -39,6 +39,9 @@
     --gold: 0 0% 60%;
     --lavender: 0 0% 70%;
     --teal: 0 0% 50%;
+    
+    --gradient-color: 0 0% 40%;
+    --sparkles-color: 0 0% 20%;
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 0 0% 26%;
@@ -82,6 +85,9 @@
     --gold: 0 0% 70%;
     --lavender: 0 0% 60%;
     --teal: 0 0% 65%;
+    
+    --gradient-color: 0 0% 60%;
+    --sparkles-color: 0 0% 100%;
 
     --sidebar-background: 0 0% 10%;
     --sidebar-foreground: 0 0% 96%;
