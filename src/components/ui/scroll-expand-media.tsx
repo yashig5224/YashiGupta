@@ -55,21 +55,32 @@ const ScrollExpandMedia = ({
       
       if (!isInView) return;
 
-      if (mediaFullyExpanded && e.deltaY < 0 && scrollProgress >= 1) {
+      // When scrolling up and media is expanded, collapse it
+      if (mediaFullyExpanded && e.deltaY < 0) {
+        e.preventDefault();
         setMediaFullyExpanded(false);
-        setScrollProgress(0.99);
+        setShowContent(false);
+        setScrollProgress(0.8);
+        return;
+      }
+      
+      // When not fully expanded, handle scroll progress
+      if (!mediaFullyExpanded) {
         e.preventDefault();
-      } else if (!mediaFullyExpanded && isInView) {
-        e.preventDefault();
-        const scrollDelta = e.deltaY * 0.002;
+        const scrollDelta = e.deltaY * 0.003;
         const newProgress = Math.min(Math.max(scrollProgress + scrollDelta, 0), 1);
         setScrollProgress(newProgress);
 
         if (newProgress >= 1) {
           setMediaFullyExpanded(true);
           setShowContent(true);
-        } else if (newProgress < 0.75) {
+        } else if (newProgress < 0.5) {
           setShowContent(false);
+        }
+        
+        // Allow normal scrolling when progress is 0 and scrolling up
+        if (newProgress <= 0 && e.deltaY < 0) {
+          return;
         }
       }
     };
@@ -92,11 +103,17 @@ const ScrollExpandMedia = ({
       const touchY = e.touches[0].clientY;
       const deltaY = touchStartY - touchY;
 
+      // When scrolling up and media is expanded, collapse it
       if (mediaFullyExpanded && deltaY < -20) {
-        setMediaFullyExpanded(false);
-        setScrollProgress(0.99);
         e.preventDefault();
-      } else if (!mediaFullyExpanded) {
+        setMediaFullyExpanded(false);
+        setShowContent(false);
+        setScrollProgress(0.8);
+        setTouchStartY(touchY);
+        return;
+      }
+      
+      if (!mediaFullyExpanded) {
         e.preventDefault();
         const scrollFactor = deltaY < 0 ? 0.008 : 0.005;
         const scrollDelta = deltaY * scrollFactor;
@@ -106,7 +123,7 @@ const ScrollExpandMedia = ({
         if (newProgress >= 1) {
           setMediaFullyExpanded(true);
           setShowContent(true);
-        } else if (newProgress < 0.75) {
+        } else if (newProgress < 0.5) {
           setShowContent(false);
         }
 
