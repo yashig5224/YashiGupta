@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
+// --- Types ---
+
 interface Particle {
   x: number;
   y: number;
@@ -11,7 +13,7 @@ interface Particle {
   vx: number;
   vy: number;
   size: number;
-  opacity: number;
+  angle: number;
 }
 
 interface BackgroundParticle {
@@ -24,14 +26,20 @@ interface BackgroundParticle {
   phase: number;
 }
 
-const PARTICLE_DENSITY = 0.00012;
-const BG_PARTICLE_DENSITY = 0.00004;
+// --- Configuration Constants ---
+
+const PARTICLE_DENSITY = 0.00015;
+const BG_PARTICLE_DENSITY = 0.00005;
 const MOUSE_RADIUS = 180;
 const RETURN_SPEED = 0.08;
 const DAMPING = 0.90;
 const REPULSION_STRENGTH = 1.2;
 
+// --- Helper Functions ---
+
 const randomRange = (min: number, max: number) => Math.random() * (max - min) + min;
+
+// --- Components ---
 
 const AntiGravityCanvas: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -60,7 +68,7 @@ const AntiGravityCanvas: React.FC = () => {
         vx: 0,
         vy: 0,
         size: randomRange(1, 2.5),
-        opacity: randomRange(0.3, 1),
+        angle: Math.random() * Math.PI * 2,
       });
     }
     particlesRef.current = newParticles;
@@ -98,11 +106,11 @@ const AntiGravityCanvas: React.FC = () => {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Subtle radial vignette in grayscale
+    // Pulsating Radial Glow (grayscale)
     const centerX = canvas.width / 2;
     const centerY = canvas.height / 2;
     const pulseSpeed = 0.0008;
-    const pulseOpacity = Math.sin(time * pulseSpeed) * 0.02 + 0.05;
+    const pulseOpacity = Math.sin(time * pulseSpeed) * 0.035 + 0.085;
     
     const gradient = ctx.createRadialGradient(
       centerX, centerY, 0,
@@ -114,6 +122,7 @@ const AntiGravityCanvas: React.FC = () => {
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+    // Background Particles
     const bgParticles = backgroundParticlesRef.current;
     
     for (let i = 0; i < bgParticles.length; i++) {
@@ -137,9 +146,11 @@ const AntiGravityCanvas: React.FC = () => {
     }
     ctx.globalAlpha = 1.0;
 
+    // Main Particles Physics
     const particles = particlesRef.current;
     const mouse = mouseRef.current;
 
+    // Apply Forces
     for (let i = 0; i < particles.length; i++) {
       const p = particles[i];
 
@@ -164,6 +175,7 @@ const AntiGravityCanvas: React.FC = () => {
       p.vy += springDy * RETURN_SPEED;
     }
 
+    // Collision Resolution
     for (let i = 0; i < particles.length; i++) {
       for (let j = i + 1; j < particles.length; j++) {
         const p1 = particles[i];
@@ -215,6 +227,7 @@ const AntiGravityCanvas: React.FC = () => {
       }
     }
 
+    // Integration & Drawing
     for (let i = 0; i < particles.length; i++) {
       const p = particles[i];
 
@@ -228,7 +241,7 @@ const AntiGravityCanvas: React.FC = () => {
       ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
       
       const velocity = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
-      const opacity = Math.min(0.3 + velocity * 0.1, 1) * p.opacity;
+      const opacity = Math.min(0.3 + velocity * 0.1, 1);
       
       ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
       ctx.fill();
@@ -293,7 +306,7 @@ const AntiGravityCanvas: React.FC = () => {
         className="absolute inset-0 w-full h-full"
       />
       <div className="absolute bottom-4 left-4 text-xs text-muted-foreground/50 font-mono hidden md:block">
-        <p>{debugInfo.count} particles</p>
+        <p>{debugInfo.count} entities</p>
         <p>{debugInfo.fps} FPS</p>
       </div>
     </div>
