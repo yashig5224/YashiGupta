@@ -33,27 +33,26 @@ export function NavBar({ items, className }: NavBarProps) {
 
   // Scroll-based active tab detection
   useEffect(() => {
-    const sectionIds = items.map(item => item.url.replace('#', ''))
-    
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (isClickScrolling.current) return
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const match = items.find(item => item.url === `#${entry.target.id}`)
-            if (match) setActiveTab(match.name)
-          }
-        })
-      },
-      { threshold: 0.3, rootMargin: '-10% 0px -60% 0px' }
-    )
+    const handleScroll = () => {
+      if (isClickScrolling.current) return
 
-    sectionIds.forEach(id => {
-      const el = document.getElementById(id)
-      if (el) observer.observe(el)
-    })
+      const scrollY = window.scrollY + window.innerHeight / 3
 
-    return () => observer.disconnect()
+      let currentSection = items[0].name
+      for (const item of items) {
+        const id = item.url.replace('#', '')
+        const el = document.getElementById(id)
+        if (el && el.offsetTop <= scrollY) {
+          currentSection = item.name
+        }
+      }
+      setActiveTab(currentSection)
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    handleScroll()
+
+    return () => window.removeEventListener('scroll', handleScroll)
   }, [items])
 
   const handleClick = (item: NavItem) => {
