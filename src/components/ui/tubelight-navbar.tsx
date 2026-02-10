@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { motion } from "framer-motion"
 import { LucideIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -19,6 +19,7 @@ interface NavBarProps {
 export function NavBar({ items, className }: NavBarProps) {
   const [activeTab, setActiveTab] = useState(items[0].name)
   const [isMobile, setIsMobile] = useState(false)
+  const isClickScrolling = useRef(false)
 
   useEffect(() => {
     const handleResize = () => {
@@ -30,11 +31,40 @@ export function NavBar({ items, className }: NavBarProps) {
     return () => window.removeEventListener("resize", handleResize)
   }, [])
 
+  // Scroll-based active tab detection
+  useEffect(() => {
+    const sectionIds = items.map(item => item.url.replace('#', ''))
+    
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (isClickScrolling.current) return
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const match = items.find(item => item.url === `#${entry.target.id}`)
+            if (match) setActiveTab(match.name)
+          }
+        })
+      },
+      { threshold: 0.3, rootMargin: '-10% 0px -60% 0px' }
+    )
+
+    sectionIds.forEach(id => {
+      const el = document.getElementById(id)
+      if (el) observer.observe(el)
+    })
+
+    return () => observer.disconnect()
+  }, [items])
+
   const handleClick = (item: NavItem) => {
     setActiveTab(item.name)
+    isClickScrolling.current = true
     const element = document.querySelector(item.url)
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' })
+      setTimeout(() => { isClickScrolling.current = false }, 1000)
+    } else {
+      isClickScrolling.current = false
     }
   }
 
