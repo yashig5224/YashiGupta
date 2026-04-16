@@ -30,118 +30,118 @@ export function SignatureIntro({ onComplete, duration = 2.8 }: SignatureIntroPro
     >
       <div className="relative w-full max-w-3xl px-8">
         <svg
-          viewBox="0 0 800 200"
+          viewBox="0 0 800 220"
           className="w-full h-auto"
           xmlns="http://www.w3.org/2000/svg"
         >
-          {/* "Y" */}
+          {/* "Y" - sweeping diagonal strokes */}
           <path
-            d="M30 40 L55 100 L55 160"
+            d="M28 38 Q38 58, 52 82 Q56 90, 58 96"
             className="signature-path"
-            style={{ animationDelay: "0s", animationDuration: `${duration * 0.1}s` }}
+            style={{ animationDelay: "0s", animationDuration: `${duration * 0.09}s` }}
           />
           <path
-            d="M80 40 L55 100"
+            d="M82 36 Q72 56, 58 82 Q56 96, 54 120 Q52 140, 56 158"
             className="signature-path"
-            style={{ animationDelay: `${duration * 0.08}s`, animationDuration: `${duration * 0.06}s` }}
-          />
-
-          {/* "a" */}
-          <path
-            d="M110 80 C110 60, 145 55, 148 80 C150 100, 115 115, 110 95 C108 85, 148 80, 150 105 C151 115, 155 120, 155 110"
-            className="signature-path"
-            style={{ animationDelay: `${duration * 0.14}s`, animationDuration: `${duration * 0.1}s` }}
+            style={{ animationDelay: `${duration * 0.07}s`, animationDuration: `${duration * 0.1}s` }}
           />
 
-          {/* "s" */}
+          {/* "a" - looping cursive a */}
           <path
-            d="M175 75 C185 65, 205 68, 195 80 C185 90, 170 88, 172 98 C174 110, 205 112, 205 100"
+            d="M90 108 Q88 82, 112 76 Q136 72, 144 88 Q150 100, 136 110 Q120 120, 104 112 Q92 104, 108 88 Q118 76, 148 82 Q156 86, 154 108 Q152 118, 158 112"
             className="signature-path"
-            style={{ animationDelay: `${duration * 0.24}s`, animationDuration: `${duration * 0.08}s` }}
+            style={{ animationDelay: `${duration * 0.15}s`, animationDuration: `${duration * 0.12}s` }}
           />
 
-          {/* "h" */}
+          {/* "s" - fluid s curve */}
           <path
-            d="M220 40 L220 110"
+            d="M170 78 Q186 68, 198 74 Q208 80, 194 90 Q180 100, 172 96 Q166 100, 176 108 Q188 116, 204 108"
             className="signature-path"
-            style={{ animationDelay: `${duration * 0.32}s`, animationDuration: `${duration * 0.05}s` }}
-          />
-          <path
-            d="M220 80 C225 65, 260 65, 260 85 L260 110"
-            className="signature-path"
-            style={{ animationDelay: `${duration * 0.37}s`, animationDuration: `${duration * 0.07}s` }}
+            style={{ animationDelay: `${duration * 0.26}s`, animationDuration: `${duration * 0.08}s` }}
           />
 
-          {/* "i" */}
+          {/* "h" - tall stem with looping arch */}
           <path
-            d="M280 78 L280 110"
+            d="M216 42 Q214 62, 218 82 Q220 96, 220 112"
+            className="signature-path"
+            style={{ animationDelay: `${duration * 0.33}s`, animationDuration: `${duration * 0.06}s` }}
+          />
+          <path
+            d="M220 82 Q228 68, 248 70 Q264 74, 262 90 Q260 102, 262 114"
+            className="signature-path"
+            style={{ animationDelay: `${duration * 0.38}s`, animationDuration: `${duration * 0.07}s` }}
+          />
+
+          {/* "i" - short stroke with dot */}
+          <path
+            d="M278 80 Q276 92, 278 106 Q279 112, 282 114"
             className="signature-path"
             style={{ animationDelay: `${duration * 0.44}s`, animationDuration: `${duration * 0.04}s` }}
           />
           <circle
             cx="280"
-            cy="65"
-            r="3"
+            cy="66"
+            r="2.5"
             fill="#fff"
             className="signature-dot"
             style={{ animationDelay: `${duration * 0.48}s` }}
           />
 
-          {/* Connecting flourish from first to last name */}
+          {/* Connecting flourish — sweeping curve to last name */}
           <path
-            d="M290 110 C310 130, 340 130, 370 60"
+            d="M284 114 Q300 132, 320 128 Q345 120, 360 82 Q368 62, 380 56"
             className="signature-path"
-            style={{ animationDelay: `${duration * 0.48}s`, animationDuration: `${duration * 0.08}s` }}
+            style={{ animationDelay: `${duration * 0.48}s`, animationDuration: `${duration * 0.09}s` }}
           />
 
-          {/* "G" */}
+          {/* "G" - expressive capital G with curl */}
           <path
-            d="M395 50 C350 45, 340 70, 345 95 C350 125, 395 130, 405 105 L405 85 L380 85"
+            d="M398 48 Q370 42, 352 60 Q340 78, 346 100 Q354 124, 384 126 Q408 124, 412 104 Q414 92, 404 88 L382 88"
             className="signature-path"
-            style={{ animationDelay: `${duration * 0.56}s`, animationDuration: `${duration * 0.1}s` }}
+            style={{ animationDelay: `${duration * 0.56}s`, animationDuration: `${duration * 0.11}s` }}
           />
 
-          {/* "u" */}
+          {/* "u" - smooth valley */}
           <path
-            d="M425 78 C425 78, 420 105, 435 110 C450 115, 460 95, 460 78 L460 110"
+            d="M424 80 Q420 98, 428 110 Q438 118, 450 108 Q460 96, 458 80 Q458 92, 460 108 Q462 116, 466 112"
             className="signature-path"
             style={{ animationDelay: `${duration * 0.66}s`, animationDuration: `${duration * 0.08}s` }}
           />
 
-          {/* "p" */}
+          {/* "p" - descending stroke with bowl */}
           <path
-            d="M480 78 L480 160"
+            d="M478 78 Q476 108, 478 140 Q480 156, 480 166"
             className="signature-path"
-            style={{ animationDelay: `${duration * 0.74}s`, animationDuration: `${duration * 0.04}s` }}
+            style={{ animationDelay: `${duration * 0.74}s`, animationDuration: `${duration * 0.05}s` }}
           />
           <path
-            d="M480 80 C485 65, 520 65, 520 85 C520 105, 485 110, 480 95"
+            d="M478 82 Q486 66, 510 68 Q528 72, 524 90 Q518 108, 498 110 Q484 108, 480 96"
             className="signature-path"
-            style={{ animationDelay: `${duration * 0.78}s`, animationDuration: `${duration * 0.07}s` }}
+            style={{ animationDelay: `${duration * 0.78}s`, animationDuration: `${duration * 0.08}s` }}
           />
 
-          {/* "t" */}
+          {/* "t" - crossed stroke */}
           <path
-            d="M545 55 L545 110 C545 118, 560 118, 565 110"
+            d="M544 54 Q542 74, 544 94 Q546 108, 548 114 Q552 120, 564 114"
             className="signature-path"
             style={{ animationDelay: `${duration * 0.85}s`, animationDuration: `${duration * 0.05}s` }}
           />
           <path
-            d="M530 75 L560 75"
+            d="M530 76 Q544 72, 562 76"
             className="signature-path"
             style={{ animationDelay: `${duration * 0.9}s`, animationDuration: `${duration * 0.03}s` }}
           />
 
-          {/* "a" final */}
+          {/* "a" final - looping finish */}
           <path
-            d="M580 80 C580 60, 615 55, 618 80 C620 100, 585 115, 580 95 C578 85, 618 80, 620 105 C621 115, 625 120, 625 110"
+            d="M578 84 Q576 66, 600 62 Q622 60, 624 80 Q626 96, 610 106 Q594 112, 582 102 Q574 92, 590 80 Q604 72, 624 82 Q632 90, 630 108 Q628 118, 636 114"
             className="signature-path"
-            style={{ animationDelay: `${duration * 0.93}s`, animationDuration: `${duration * 0.07}s` }}
+            style={{ animationDelay: `${duration * 0.92}s`, animationDuration: `${duration * 0.08}s` }}
           />
 
-          {/* Final flourish underline */}
+          {/* Final flourish underline — long sweeping curve */}
           <path
-            d="M40 140 C150 155, 400 160, 620 135"
+            d="M36 148 Q120 162, 280 168 Q440 170, 580 154 Q620 148, 640 140"
             className="signature-path signature-underline"
             style={{ animationDelay: `${duration * 1.0}s`, animationDuration: `${duration * 0.12}s` }}
           />
@@ -163,7 +163,7 @@ export function SignatureIntro({ onComplete, duration = 2.8 }: SignatureIntroPro
         .signature-path {
           fill: none;
           stroke: #fff;
-          stroke-width: 2.5;
+          stroke-width: 2;
           stroke-linecap: round;
           stroke-linejoin: round;
           stroke-dasharray: 1000;
@@ -172,13 +172,13 @@ export function SignatureIntro({ onComplete, duration = 2.8 }: SignatureIntroPro
         }
 
         .signature-underline {
-          stroke-width: 1.5;
-          opacity: 0.6;
+          stroke-width: 1.2;
+          opacity: 0.5;
         }
 
         .signature-dot {
           opacity: 0;
-          animation: dotAppear 0.2s forwards ease-out;
+          animation: dotAppear 0.3s forwards ease-out;
         }
 
         @keyframes drawSignature {
