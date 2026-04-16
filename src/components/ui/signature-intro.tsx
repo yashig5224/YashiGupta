@@ -13,13 +13,13 @@ export function SignatureIntro({ onComplete, duration = 3.5 }: SignatureIntroPro
   const [fontLoaded, setFontLoaded] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout>>();
+  const rafRef = useRef<number>();
 
   const stableOnComplete = useCallback(() => {
     onComplete?.();
   }, [onComplete]);
 
   useEffect(() => {
-    // Load cursive font
     const font = new FontFace(
       "Mrs Saint Delafield",
       "url(https://fonts.gstatic.com/s/mrssaintdelafield/v13/v6-IGRDKFGPZ4hv8vmNZQmADKRWyMnY.woff2)"
@@ -27,10 +27,7 @@ export function SignatureIntro({ onComplete, duration = 3.5 }: SignatureIntroPro
     font.load().then((loaded) => {
       document.fonts.add(loaded);
       setFontLoaded(true);
-    }).catch(() => {
-      // Fallback if font fails
-      setFontLoaded(true);
-    });
+    }).catch(() => setFontLoaded(true));
   }, []);
 
   useEffect(() => {
@@ -41,94 +38,97 @@ export function SignatureIntro({ onComplete, duration = 3.5 }: SignatureIntroPro
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // High DPI
     const dpr = window.devicePixelRatio || 1;
-    const w = canvas.clientWidth;
-    const h = canvas.clientHeight;
+    const rect = canvas.getBoundingClientRect();
+    const w = rect.width;
+    const h = rect.height;
     canvas.width = w * dpr;
     canvas.height = h * dpr;
     ctx.scale(dpr, dpr);
 
-    // Text config
-    const fontSize = Math.min(w * 0.14, 120);
-    ctx.font = `${fontSize}px "Mrs Saint Delafield", cursive`;
-    ctx.strokeStyle = "#ffffff";
-    ctx.lineWidth = 1.2;
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
-    ctx.fillStyle = "transparent";
-
+    const fontSize = Math.min(w * 0.13, 110);
     const text = "Yashi Gupta";
+
+    ctx.font = `${fontSize}px "Mrs Saint Delafield", cursive`;
     const textWidth = ctx.measureText(text).width;
     const startX = (w - textWidth) / 2;
-    const startY = h * 0.55;
+    const startY = h * 0.6;
 
-    // Get text path points by sampling
-    // We'll animate a reveal mask from left to right
     const totalDuration = duration * 1000;
     const startTime = performance.now();
 
-    // Draw underline params
-    const underlineY = startY + fontSize * 0.15;
+    const underlineY = startY + fontSize * 0.12;
     const underlineStartX = startX - 20;
-    const underlineEndX = startX + textWidth + 20;
+    const underlineEndX = startX + textWidth + 30;
 
     function draw(now: number) {
       const elapsed = now - startTime;
       const progress = Math.min(elapsed / totalDuration, 1);
-      // Eased progress
       const eased = progress < 0.5
         ? 2 * progress * progress
         : 1 - Math.pow(-2 * progress + 2, 2) / 2;
 
       ctx!.clearRect(0, 0, w, h);
 
-      // Clip to reveal text progressively left-to-right
+      // Progressive reveal via clipping
       const revealX = startX + textWidth * eased;
 
       ctx!.save();
       ctx!.beginPath();
-      ctx!.rect(0, 0, revealX, h);
+      ctx!.rect(0, 0, revealX + 2, h);
       ctx!.clip();
 
-      // Draw signature text as stroke
+      // Draw text as stroke (outline only, like pen writing)
+      ctx!.font = `${fontSize}px "Mrs Saint Delafield", cursive`;
+      ctx!.strokeStyle = "#ffffff";
+      ctx!.lineWidth = 1.3;
+      ctx!.lineCap = "round";
+      ctx!.lineJoin = "round";
       ctx!.strokeText(text, startX, startY);
+
+      // Also fill with very subtle opacity for body
+      ctx!.fillStyle = "rgba(255,255,255,0.15)";
+      ctx!.fillText(text, startX, startY);
 
       ctx!.restore();
 
-      // Underline flourish (starts at 70% progress)
-      if (progress > 0.7) {
-        const uProgress = Math.min((progress - 0.7) / 0.3, 1);
+      // Underline flourish (starts at 75%)
+      if (progress > 0.75) {
+        const uProgress = Math.min((progress - 0.75) / 0.25, 1);
         const uEased = 1 - Math.pow(1 - uProgress, 3);
         const uCurrentX = underlineStartX + (underlineEndX - underlineStartX) * uEased;
 
         ctx!.save();
-        ctx!.globalAlpha = 0.3;
-        ctx!.lineWidth = 0.8;
+        ctx!.globalAlpha = 0.25;
+        ctx!.strokeStyle = "#ffffff";
+        ctx!.lineWidth = 0.7;
+        ctx!.lineCap = "round";
         ctx!.beginPath();
         ctx!.moveTo(underlineStartX, underlineY);
 
-        // Slight curve
         const cpX = (underlineStartX + uCurrentX) / 2;
-        const cpY = underlineY + 15;
-        ctx!.quadraticCurveTo(cpX, cpY, uCurrentX, underlineY - 5);
+        const cpY = underlineY + 18;
+        ctx!.quadraticCurveTo(cpX, cpY, uCurrentX, underlineY - 8);
         ctx!.stroke();
         ctx!.restore();
       }
 
       if (progress < 1) {
-        requestAnimationFrame(draw);
+        rafRef.current = requestAnimationFrame(draw);
       }
     }
 
-    requestAnimationFrame(draw);
+    rafRef.current = requestAnimationFrame(draw);
 
     timerRef.current = setTimeout(() => {
       setAnimationDone(true);
       setTimeout(() => stableOnComplete(), 800);
     }, totalDuration + 600);
 
-    return () => clearTimeout(timerRef.current);
+    return () => {
+      clearTimeout(timerRef.current);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
   }, [fontLoaded, duration, stableOnComplete]);
 
   return (
@@ -140,16 +140,14 @@ export function SignatureIntro({ onComplete, duration = 3.5 }: SignatureIntroPro
     >
       <canvas
         ref={canvasRef}
-        className="w-full max-w-3xl px-8"
-        style={{ height: "200px" }}
+        style={{ width: "min(90vw, 800px)", height: "220px" }}
       />
 
-      {/* Subtitle */}
       <motion.p
         initial={{ opacity: 0, y: 10 }}
         animate={animationDone ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.6 }}
-        className="mt-4 text-base sm:text-lg tracking-[0.3em] uppercase"
+        className="mt-2 text-base sm:text-lg tracking-[0.3em] uppercase"
         style={{ color: "rgba(255,255,255,0.35)", fontWeight: 300 }}
       >
         Creative Web Developer
