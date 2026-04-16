@@ -8,15 +8,32 @@ interface SignatureIntroProps {
   duration?: number;
 }
 
-export function SignatureIntro({ onComplete, duration = 3.2 }: SignatureIntroProps) {
+export function SignatureIntro({ onComplete, duration = 3 }: SignatureIntroProps) {
   const [animationDone, setAnimationDone] = useState(false);
+  const pathRef = useRef<SVGPathElement>(null);
+  const underlineRef = useRef<SVGPathElement>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout>>();
 
   useEffect(() => {
+    const path = pathRef.current;
+    const underline = underlineRef.current;
+    if (path) {
+      const length = path.getTotalLength();
+      path.style.strokeDasharray = `${length}`;
+      path.style.strokeDashoffset = `${length}`;
+      path.style.animation = `drawSignature ${duration}s cubic-bezier(0.25, 0.1, 0.25, 1) forwards`;
+    }
+    if (underline) {
+      const uLength = underline.getTotalLength();
+      underline.style.strokeDasharray = `${uLength}`;
+      underline.style.strokeDashoffset = `${uLength}`;
+      underline.style.animation = `drawSignature ${duration * 0.4}s cubic-bezier(0.25, 0.1, 0.25, 1) ${duration * 0.85}s forwards`;
+    }
+
     timerRef.current = setTimeout(() => {
       setAnimationDone(true);
       setTimeout(() => onComplete?.(), 800);
-    }, duration * 1000 + 600);
+    }, duration * 1000 + 800);
 
     return () => clearTimeout(timerRef.current);
   }, [duration, onComplete]);
@@ -28,158 +45,148 @@ export function SignatureIntro({ onComplete, duration = 3.2 }: SignatureIntroPro
       exit={{ opacity: 0 }}
       transition={{ duration: 0.8, ease: "easeInOut" }}
     >
-      <div className="relative w-full max-w-4xl px-6">
+      <div className="relative w-full max-w-3xl px-8">
         <svg
-          viewBox="0 0 900 280"
+          viewBox="0 0 800 300"
           className="w-full h-auto"
           xmlns="http://www.w3.org/2000/svg"
         >
-          {/* ===== "Y" — Capital calligraphic Y with entry flourish ===== */}
-          {/* Entry flourish loop */}
+          {/* Main signature path - "Yashi Gupta" in flowing cursive */}
           <path
-            d="M20 120 Q10 100, 30 80 Q50 60, 60 50 Q70 44, 65 52"
-            className="sig-thin"
-            style={{ animationDelay: "0s", animationDuration: `${duration * 0.06}s` }}
-          />
-          {/* Left diagonal — thick downstroke */}
-          <path
-            d="M65 52 Q58 68, 52 80 Q42 100, 55 108"
-            className="sig-thick"
-            style={{ animationDelay: `${duration * 0.05}s`, animationDuration: `${duration * 0.06}s` }}
-          />
-          {/* Right diagonal — thin hairline */}
-          <path
-            d="M95 38 Q88 52, 78 70 Q68 88, 55 108"
-            className="sig-thin"
-            style={{ animationDelay: `${duration * 0.1}s`, animationDuration: `${duration * 0.06}s` }}
-          />
-          {/* Descender — thick flowing tail */}
-          <path
-            d="M55 108 Q50 130, 48 150 Q44 172, 52 180 Q60 186, 72 176 Q80 168, 85 155"
-            className="sig-thick"
-            style={{ animationDelay: `${duration * 0.15}s`, animationDuration: `${duration * 0.07}s` }}
+            ref={pathRef}
+            d={`
+              M 80 60
+              Q 70 55, 75 70
+              Q 80 90, 95 130
+              Q 100 145, 105 155
+              Q 108 160, 110 155
+              Q 130 100, 145 70
+              Q 155 50, 160 45
+              Q 165 42, 162 50
+              Q 155 70, 148 95
+              Q 140 125, 135 155
+              Q 132 170, 135 185
+              Q 138 195, 150 185
+              Q 165 170, 175 150
+
+              Q 180 140, 178 155
+              Q 175 175, 182 180
+              Q 190 182, 198 170
+              Q 205 158, 200 148
+              Q 195 140, 185 145
+              Q 178 150, 178 155
+
+              Q 198 170, 210 160
+              Q 218 152, 222 142
+              Q 228 128, 235 120
+              Q 242 112, 248 118
+              Q 252 126, 248 138
+              Q 242 152, 232 158
+              Q 222 162, 218 155
+              Q 215 148, 222 142
+
+              Q 248 138, 260 145
+              Q 265 148, 268 142
+              Q 274 128, 278 115
+              Q 282 100, 286 90
+              Q 290 82, 292 78
+              Q 294 76, 292 82
+              Q 288 96, 282 115
+              Q 278 130, 276 145
+              Q 275 158, 278 165
+              Q 282 170, 290 162
+              Q 300 150, 306 138
+              Q 310 130, 315 125
+              Q 322 120, 326 128
+              Q 330 138, 324 148
+              Q 316 158, 306 155
+              Q 300 150, 306 138
+
+              Q 326 128, 338 138
+              Q 342 142, 340 148
+              Q 336 156, 330 160
+              Q 324 164, 322 158
+              Q 320 152, 328 148
+              Q 340 148, 345 155
+              Q 350 162, 358 158
+              Q 365 152, 370 140
+
+              Q 375 125, 390 110
+              Q 410 85, 430 75
+              Q 445 68, 455 72
+              Q 462 78, 458 90
+              Q 450 105, 435 115
+
+              Q 450 105, 465 100
+              Q 485 92, 498 88
+              Q 508 86, 515 92
+              Q 520 100, 512 115
+              Q 502 132, 488 145
+              Q 475 158, 468 162
+              Q 460 165, 465 158
+              Q 475 145, 498 135
+              Q 515 128, 520 132
+              Q 525 138, 518 148
+              Q 510 160, 498 168
+              Q 488 174, 480 170
+              Q 476 165, 482 158
+
+              Q 520 132, 540 140
+              Q 548 144, 548 152
+              Q 548 162, 540 170
+              Q 530 178, 522 175
+              Q 518 170, 525 162
+              Q 535 155, 548 152
+
+              Q 555 148, 565 138
+              Q 572 125, 575 115
+              Q 578 105, 575 98
+              Q 572 92, 568 100
+              Q 562 115, 565 135
+              Q 568 155, 580 162
+              Q 590 168, 600 158
+              Q 608 148, 608 138
+              Q 608 130, 600 135
+              Q 592 142, 595 155
+              Q 598 168, 612 172
+              Q 625 174, 635 162
+              Q 642 152, 640 140
+              Q 638 132, 628 138
+              Q 620 148, 625 162
+
+              Q 635 162, 648 155
+              Q 658 148, 665 135
+              Q 670 125, 668 118
+              Q 665 112, 658 118
+              Q 650 128, 650 145
+              Q 650 160, 662 168
+              Q 672 172, 682 162
+              Q 690 150, 690 138
+
+              Q 690 150, 700 140
+              Q 710 128, 718 120
+              Q 722 116, 720 122
+            `}
+            fill="none"
+            stroke="#fff"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           />
 
-          {/* ===== "a" — connected cursive a ===== */}
+          {/* Underline flourish */}
           <path
-            d="M85 155 Q90 140, 100 128 Q108 118, 120 116 Q136 114, 142 122 Q148 132, 138 140 Q126 146, 112 140 Q104 136, 110 126 Q116 118, 142 122 Q152 128, 156 138 Q160 144, 162 140"
-            className="sig-medium"
-            style={{ animationDelay: `${duration * 0.21}s`, animationDuration: `${duration * 0.1}s` }}
-          />
-
-          {/* ===== "s" — flowing cursive s ===== */}
-          <path
-            d="M162 140 Q168 128, 180 120 Q192 114, 200 120 Q208 128, 196 136 Q184 144, 174 140 Q168 142, 174 150 Q182 158, 198 154 Q206 150, 212 142"
-            className="sig-medium"
-            style={{ animationDelay: `${duration * 0.3}s`, animationDuration: `${duration * 0.08}s` }}
-          />
-
-          {/* ===== "h" — looped ascender h ===== */}
-          {/* Ascender loop */}
-          <path
-            d="M212 142 Q216 130, 222 110 Q226 88, 232 72 Q236 58, 244 54 Q252 52, 250 62 Q248 74, 240 90 Q234 104, 232 120"
-            className="sig-medium"
-            style={{ animationDelay: `${duration * 0.37}s`, animationDuration: `${duration * 0.07}s` }}
-          />
-          {/* Arch and downstroke */}
-          <path
-            d="M232 120 Q236 112, 248 108 Q262 106, 270 114 Q278 124, 274 138 Q272 146, 278 142"
-            className="sig-thick"
-            style={{ animationDelay: `${duration * 0.43}s`, animationDuration: `${duration * 0.06}s` }}
-          />
-
-          {/* ===== "i" — with elegant dot ===== */}
-          <path
-            d="M278 142 Q282 130, 288 120 Q292 112, 296 118 Q300 128, 298 142 Q296 150, 304 144"
-            className="sig-medium"
-            style={{ animationDelay: `${duration * 0.48}s`, animationDuration: `${duration * 0.04}s` }}
-          />
-          {/* Dot — small teardrop */}
-          <path
-            d="M294 100 Q296 96, 298 100 Q296 104, 294 100"
-            className="sig-dot"
-            style={{ animationDelay: `${duration * 0.52}s` }}
-          />
-
-          {/* ===== Connecting flourish — sweeping bridge to G ===== */}
-          <path
-            d="M304 144 Q320 160, 340 164 Q370 168, 400 148 Q420 132, 440 108 Q450 94, 460 82"
-            className="sig-thin"
-            style={{ animationDelay: `${duration * 0.52}s`, animationDuration: `${duration * 0.08}s` }}
-          />
-
-          {/* ===== "G" — Grand calligraphic G with swash ===== */}
-          {/* Upper swash */}
-          <path
-            d="M460 82 Q470 60, 490 48 Q510 38, 520 42 Q530 48, 520 58"
-            className="sig-thin"
-            style={{ animationDelay: `${duration * 0.59}s`, animationDuration: `${duration * 0.04}s` }}
-          />
-          {/* Main G body */}
-          <path
-            d="M520 58 Q500 54, 478 66 Q458 82, 456 106 Q454 130, 470 146 Q488 160, 512 156 Q530 150, 536 136 Q540 124, 530 120 L510 120"
-            className="sig-thick"
-            style={{ animationDelay: `${duration * 0.62}s`, animationDuration: `${duration * 0.1}s` }}
-          />
-
-          {/* ===== "u" — flowing u ===== */}
-          <path
-            d="M530 120 Q536 112, 542 118 Q546 128, 544 140 Q540 154, 552 158 Q564 160, 572 148 Q578 136, 576 120 Q576 130, 580 146 Q582 154, 588 148"
-            className="sig-medium"
-            style={{ animationDelay: `${duration * 0.71}s`, animationDuration: `${duration * 0.07}s` }}
-          />
-
-          {/* ===== "p" — descending p with bowl ===== */}
-          {/* Descender */}
-          <path
-            d="M588 148 Q592 136, 596 120 Q600 140, 598 164 Q596 188, 592 206 Q588 218, 580 222 Q572 224, 570 216"
-            className="sig-thick"
-            style={{ animationDelay: `${duration * 0.77}s`, animationDuration: `${duration * 0.06}s` }}
-          />
-          {/* Bowl */}
-          <path
-            d="M596 120 Q604 108, 620 106 Q638 106, 642 118 Q646 132, 634 142 Q620 150, 604 146 Q596 142, 596 132"
-            className="sig-medium"
-            style={{ animationDelay: `${duration * 0.82}s`, animationDuration: `${duration * 0.06}s` }}
-          />
-
-          {/* ===== "t" — crossed t ===== */}
-          <path
-            d="M648 90 Q650 108, 652 126 Q654 142, 658 150 Q662 158, 672 152 Q678 146, 680 140"
-            className="sig-medium"
-            style={{ animationDelay: `${duration * 0.87}s`, animationDuration: `${duration * 0.04}s` }}
-          />
-          {/* Crossbar */}
-          <path
-            d="M638 118 Q652 114, 668 118"
-            className="sig-thin"
-            style={{ animationDelay: `${duration * 0.91}s`, animationDuration: `${duration * 0.02}s` }}
-          />
-
-          {/* ===== "a" final — with exit flourish ===== */}
-          <path
-            d="M680 140 Q686 126, 696 118 Q710 110, 722 114 Q734 120, 732 132 Q728 142, 716 146 Q702 148, 694 140 Q690 134, 700 124 Q712 116, 734 124 Q744 130, 742 144 Q740 154, 748 150"
-            className="sig-medium"
-            style={{ animationDelay: `${duration * 0.92}s`, animationDuration: `${duration * 0.06}s` }}
-          />
-          {/* Exit flourish */}
-          <path
-            d="M748 150 Q760 140, 774 128 Q790 114, 800 100 Q808 88, 812 78"
-            className="sig-thin"
-            style={{ animationDelay: `${duration * 0.97}s`, animationDuration: `${duration * 0.03}s` }}
-          />
-
-          {/* ===== Decorative underline flourish ===== */}
-          <path
-            d="M30 190 Q100 210, 250 218 Q420 226, 600 212 Q720 200, 780 180 Q800 172, 810 162"
-            className="sig-flourish"
-            style={{ animationDelay: `${duration * 1.0}s`, animationDuration: `${duration * 0.1}s` }}
-          />
-          {/* Secondary thin flourish */}
-          <path
-            d="M580 222 Q520 240, 400 246 Q280 248, 180 236 Q120 228, 80 216"
-            className="sig-flourish-secondary"
-            style={{ animationDelay: `${duration * 1.08}s`, animationDuration: `${duration * 0.08}s` }}
+            ref={underlineRef}
+            d={`
+              M 60 210
+              Q 200 230, 400 235
+              Q 550 232, 700 210
+              Q 740 202, 750 195
+            `}
+            fill="none"
+            stroke="rgba(255,255,255,0.3)"
+            strokeWidth="1"
+            strokeLinecap="round"
           />
         </svg>
       </div>
@@ -189,61 +196,14 @@ export function SignatureIntro({ onComplete, duration = 3.2 }: SignatureIntroPro
         initial={{ opacity: 0, y: 10 }}
         animate={animationDone ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.6 }}
-        className="mt-4 text-base sm:text-lg tracking-[0.3em] uppercase"
-        style={{ color: "rgba(255,255,255,0.4)", fontWeight: 300 }}
+        className="mt-2 text-base sm:text-lg tracking-[0.3em] uppercase"
+        style={{ color: "rgba(255,255,255,0.35)", fontWeight: 300 }}
       >
         Creative Web Developer
       </motion.p>
 
       <style>{`
-        .sig-thick,
-        .sig-medium,
-        .sig-thin,
-        .sig-flourish,
-        .sig-flourish-secondary {
-          fill: none;
-          stroke: #fff;
-          stroke-linecap: round;
-          stroke-linejoin: round;
-          stroke-dasharray: 1200;
-          stroke-dashoffset: 1200;
-          animation: drawSig forwards cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .sig-thick {
-          stroke-width: 3.2;
-        }
-
-        .sig-medium {
-          stroke-width: 2.2;
-        }
-
-        .sig-thin {
-          stroke-width: 1.2;
-          opacity: 0.85;
-        }
-
-        .sig-flourish {
-          stroke-width: 1.4;
-          opacity: 0.45;
-        }
-
-        .sig-flourish-secondary {
-          stroke-width: 0.8;
-          opacity: 0.25;
-        }
-
-        .sig-dot {
-          fill: none;
-          stroke: #fff;
-          stroke-width: 2;
-          stroke-linecap: round;
-          stroke-dasharray: 50;
-          stroke-dashoffset: 50;
-          animation: drawSig 0.3s forwards ease-out;
-        }
-
-        @keyframes drawSig {
+        @keyframes drawSignature {
           to {
             stroke-dashoffset: 0;
           }
