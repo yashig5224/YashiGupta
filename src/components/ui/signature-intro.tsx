@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { motion } from "framer-motion";
 
 interface SignatureIntroProps {
@@ -8,43 +8,128 @@ interface SignatureIntroProps {
   duration?: number;
 }
 
-export function SignatureIntro({ onComplete, duration = 3 }: SignatureIntroProps) {
+export function SignatureIntro({ onComplete, duration = 3.5 }: SignatureIntroProps) {
   const [animationDone, setAnimationDone] = useState(false);
-  const textRef = useRef<SVGTextElement>(null);
-  const underlineRef = useRef<SVGPathElement>(null);
+  const [fontLoaded, setFontLoaded] = useState(false);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout>>();
 
+  const stableOnComplete = useCallback(() => {
+    onComplete?.();
+  }, [onComplete]);
+
   useEffect(() => {
-    // Load the font first, then measure
+    // Load cursive font
     const font = new FontFace(
-      "Dancing Script",
-      "url(https://fonts.gstatic.com/s/dancingscript/v25/If2RXTr6YS-zF4S-kcSWSVi_szLgiuE.woff2)"
+      "Mrs Saint Delafield",
+      "url(https://fonts.gstatic.com/s/mrssaintdelafield/v13/v6-IGRDKFGPZ4hv8vmNZQmADKRWyMnY.woff2)"
     );
     font.load().then((loaded) => {
       document.fonts.add(loaded);
-
-      // Force re-render after font loads
-      if (textRef.current) {
-        const length = textRef.current.getComputedTextLength() * 3;
-        textRef.current.style.strokeDasharray = `${length}`;
-        textRef.current.style.strokeDashoffset = `${length}`;
-        textRef.current.style.animation = `drawSig ${duration}s cubic-bezier(0.42, 0, 0.58, 1) forwards`;
-      }
-      if (underlineRef.current) {
-        const uLen = underlineRef.current.getTotalLength();
-        underlineRef.current.style.strokeDasharray = `${uLen}`;
-        underlineRef.current.style.strokeDashoffset = `${uLen}`;
-        underlineRef.current.style.animation = `drawSig ${duration * 0.35}s ease-out ${duration * 0.8}s forwards`;
-      }
+      setFontLoaded(true);
+    }).catch(() => {
+      // Fallback if font fails
+      setFontLoaded(true);
     });
+  }, []);
+
+  useEffect(() => {
+    if (!fontLoaded) return;
+
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    // High DPI
+    const dpr = window.devicePixelRatio || 1;
+    const w = canvas.clientWidth;
+    const h = canvas.clientHeight;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    ctx.scale(dpr, dpr);
+
+    // Text config
+    const fontSize = Math.min(w * 0.14, 120);
+    ctx.font = `${fontSize}px "Mrs Saint Delafield", cursive`;
+    ctx.strokeStyle = "#ffffff";
+    ctx.lineWidth = 1.2;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.fillStyle = "transparent";
+
+    const text = "Yashi Gupta";
+    const textWidth = ctx.measureText(text).width;
+    const startX = (w - textWidth) / 2;
+    const startY = h * 0.55;
+
+    // Get text path points by sampling
+    // We'll animate a reveal mask from left to right
+    const totalDuration = duration * 1000;
+    const startTime = performance.now();
+
+    // Draw underline params
+    const underlineY = startY + fontSize * 0.15;
+    const underlineStartX = startX - 20;
+    const underlineEndX = startX + textWidth + 20;
+
+    function draw(now: number) {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / totalDuration, 1);
+      // Eased progress
+      const eased = progress < 0.5
+        ? 2 * progress * progress
+        : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+
+      ctx!.clearRect(0, 0, w, h);
+
+      // Clip to reveal text progressively left-to-right
+      const revealX = startX + textWidth * eased;
+
+      ctx!.save();
+      ctx!.beginPath();
+      ctx!.rect(0, 0, revealX, h);
+      ctx!.clip();
+
+      // Draw signature text as stroke
+      ctx!.strokeText(text, startX, startY);
+
+      ctx!.restore();
+
+      // Underline flourish (starts at 70% progress)
+      if (progress > 0.7) {
+        const uProgress = Math.min((progress - 0.7) / 0.3, 1);
+        const uEased = 1 - Math.pow(1 - uProgress, 3);
+        const uCurrentX = underlineStartX + (underlineEndX - underlineStartX) * uEased;
+
+        ctx!.save();
+        ctx!.globalAlpha = 0.3;
+        ctx!.lineWidth = 0.8;
+        ctx!.beginPath();
+        ctx!.moveTo(underlineStartX, underlineY);
+
+        // Slight curve
+        const cpX = (underlineStartX + uCurrentX) / 2;
+        const cpY = underlineY + 15;
+        ctx!.quadraticCurveTo(cpX, cpY, uCurrentX, underlineY - 5);
+        ctx!.stroke();
+        ctx!.restore();
+      }
+
+      if (progress < 1) {
+        requestAnimationFrame(draw);
+      }
+    }
+
+    requestAnimationFrame(draw);
 
     timerRef.current = setTimeout(() => {
       setAnimationDone(true);
-      setTimeout(() => onComplete?.(), 800);
-    }, duration * 1000 + 800);
+      setTimeout(() => stableOnComplete(), 800);
+    }, totalDuration + 600);
 
     return () => clearTimeout(timerRef.current);
-  }, [duration, onComplete]);
+  }, [fontLoaded, duration, stableOnComplete]);
 
   return (
     <motion.div
@@ -53,40 +138,11 @@ export function SignatureIntro({ onComplete, duration = 3 }: SignatureIntroProps
       exit={{ opacity: 0 }}
       transition={{ duration: 0.8, ease: "easeInOut" }}
     >
-      <div className="relative w-full max-w-3xl px-8">
-        <svg
-          viewBox="0 0 700 200"
-          className="w-full h-auto overflow-visible"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <text
-            ref={textRef}
-            x="350"
-            y="130"
-            textAnchor="middle"
-            fontFamily="'Dancing Script', cursive"
-            fontSize="120"
-            fontWeight="700"
-            fill="none"
-            stroke="#fff"
-            strokeWidth="1.2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            Yashi Gupta
-          </text>
-
-          {/* Sweeping underline */}
-          <path
-            ref={underlineRef}
-            d="M 80 165 Q 250 190, 400 192 Q 550 190, 650 170"
-            fill="none"
-            stroke="rgba(255,255,255,0.25)"
-            strokeWidth="0.8"
-            strokeLinecap="round"
-          />
-        </svg>
-      </div>
+      <canvas
+        ref={canvasRef}
+        className="w-full max-w-3xl px-8"
+        style={{ height: "200px" }}
+      />
 
       {/* Subtitle */}
       <motion.p
@@ -98,14 +154,6 @@ export function SignatureIntro({ onComplete, duration = 3 }: SignatureIntroProps
       >
         Creative Web Developer
       </motion.p>
-
-      <style>{`
-        @keyframes drawSig {
-          to {
-            stroke-dashoffset: 0;
-          }
-        }
-      `}</style>
     </motion.div>
   );
 }
