@@ -5,7 +5,7 @@ interface IntroAnimationProps {
 }
 
 const IntroAnimation = ({ onComplete }: IntroAnimationProps) => {
-  return <SignatureIntro onComplete={onComplete} duration={2.8} />;
+  return <SignatureIntro onComplete={onComplete} duration={3.2} />;
 };
 
 export default IntroAnimation;
