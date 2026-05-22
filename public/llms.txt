@@ -1,0 +1,14 @@
+# Yashi Gupta — Portfolio
+
+> Personal portfolio of Yashi Gupta, a Creative Web Developer building AI-powered, animated, and interactive digital experiences.
+
+A single-page portfolio with sections for an introduction, about, featured projects, technical skills, and contact.
+
+## Pages
+
+- [Home](/): Hero introduction, about, projects, skills, and contact for Yashi Gupta.
+
+## Optional
+
+- [Contact](/#contact): Email, phone, LinkedIn, and GitHub links.
+- [Projects](/#projects): Featured work including PaisaPath, Linguistic AI Chatbot, AI Study Planner, and AI Dental Clinic System.
